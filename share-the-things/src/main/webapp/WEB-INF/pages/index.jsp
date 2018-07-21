@@ -1,44 +1,38 @@
-<!DOCTYPE html>
 <html>
-<title>Crucible Aggregator</title>
+<title>My Things</title>
+
 <head>
-<link rel="shortcut icon" href="https://blogs.cerner.com/favicon.ico">
+    <link rel="shortcut icon" href="https://blogs.cerner.com/favicon.ico"> <!--placeholder-->
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
 </head>
-<body style="width: 100%; background-color: #0d94d2;">
-<div style="max-width: 960px; 
-    overflow: auto;
-    position: absolute;
-    top:0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 10;
 
-    margin: auto;
-    background-color: white;">
-<table style="height: 100%; width: 100%; padding: 2em"><tr><td>
-<div style="position: relative; top: 0; bottom: 0; padding: 10">
-<table>
-  <tr>
-    <td style="vertical-align: center; align: center;"><a href="/crucible-aggregator"><img src="https://www.cerner.com/-/media/cerner-media-folder/home-page/cerner_rgb_standard_-horizontal.png" width="250px"></a></td>
-    <td style="font-size: xx-large; vertical-align: center; padding: 10px; align: center;"><a href="/crucible-aggregator" style="color: inherit; text-decoration:none;"><b>Crucible Review Aggregator</b></a></td>
-  </tr>
-</table>
-<h2>${headerText}</h2>
-<p>${reviewInformation}</p>
-
-<h2>${githubHeader}</h2>
-<p>${githubIssues}</p>
-
-</div></td></tr>
-
-<tr><td style="height: 100%; vertical-align: bottom;">
-<div style="overflow: auto; position: relative; right: 0; bottom: 0; left: 0; text-align: right;">
-<p style="font-size: 75%">Created by <a href="mailto:aaron.mcginn@cerner.com">Aaron McGinn</a> &copy; 2017 Cerner Corporation | ${hitCount}
-</div>
-</td></tr></table>
-
-</div>
-${script}
+<body style="width: 100%"> <!--; background-color: #0d94d2;-->
+    <div class="main">
+        <table>
+            <tr class="navbar" style="align:center">
+                <td style="vertical-align: center; align: left; padding:10px">
+                    <img src="../images/hamburgermenu.png" width="25px">
+                </td>
+                <td class="header_font">
+                    <b>My Things</b>
+                </td>
+                <td style="vertical-align: center; align: center; padding:10px">
+                    <img src="../images/barscan.png" width="25px">
+                </td>
+                <td style="vertical-align: center; align: center; padding:10px">
+                    <img src="../images/search.png" width="25px">
+                </td>
+            </tr>
+            <tr>
+                <td class="rectangle font">Books</td>
+                <td class="rectangle font">Tools</td>
+            </tr>
+            <tr>
+                <td class="rectangle font">Kitchenware</td>
+                <td class="rectangle font">Miscellaneous</td>
+            </tr>
+        </table>
+    </div>
 </body>
+
 </html>
