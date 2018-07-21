@@ -142,9 +142,9 @@
             <version>2.2</version>
             <configuration>
                <port>3737</port>
-               <path>/crucible-aggregator</path>
+               <path>/share-all-the-things</path>
                <url>http://localhost:3737/manager</url>
-               <server>aggregator</server>
+               <server>sharer</server>
             </configuration>
          </plugin>
       </plugins>
