@@ -42,6 +42,8 @@ public class ReadISBN
 
         final String isbn = "0441172717";
 
+        // final String isbn = "9780441172719"; // test isbn13 - works
+
         // final Set<String> isbns = SetUtils.newSet("0590353403");
         // final String isbn = "0590353403";
         // I suspect the API doesn't support multiple isbns
