@@ -14,6 +14,6 @@ public final class ShareItApplication extends Application
     @Override
     public Set<Class<?>> getClasses()
     {
-        return Sets.<Class<?>> newHashSet(AcceptHeaderApiListingResource.class, SwaggerSerializers.class, UsersApi.class);
+        return Sets.<Class<?>> newHashSet(AcceptHeaderApiListingResource.class, SwaggerSerializers.class, UsersApi.class, BooksApi.class);
     }
 }
