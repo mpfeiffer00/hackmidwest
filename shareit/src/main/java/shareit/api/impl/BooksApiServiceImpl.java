@@ -27,6 +27,6 @@ public class BooksApiServiceImpl extends BooksApiService
         restBook.setImageUrl(book.getImageUrl());
         restBook.setSmallImageUrl(book.getSmallImageUrl());
 
-        return Response.ok().entity(book).build();
+        return Response.ok().entity(restBook).build();
     }
 }
