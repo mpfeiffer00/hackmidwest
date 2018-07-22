@@ -1,7 +1,5 @@
 package com.cerner.engineering;
 
-import com.cerner.engineering.object.Book;
-
 import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Set;
@@ -16,6 +14,8 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+
+import object.Book;
 
 public class ReadISBN
 {

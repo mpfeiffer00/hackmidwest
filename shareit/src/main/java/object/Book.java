@@ -1,4 +1,4 @@
-package com.cerner.engineering.object;
+package object;
 
 import com.cerner.common.core.HashCodeAssistant;
 import com.cerner.common.core.builder.AbstractExpressionBuilder;

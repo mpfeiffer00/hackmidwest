@@ -1,26 +1,32 @@
 package shareit.api.impl;
 
-import shareit.api.*;
-import shareit.model.*;
-
-import shareit.model.Book;
-
-import java.util.List;
-import shareit.api.NotFoundException;
-
-import java.io.InputStream;
-
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import com.cerner.engineering.ReadISBN;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import javax.validation.constraints.*;
 
-public class BooksApiServiceImpl extends BooksApiService {
+import shareit.api.BooksApiService;
+import shareit.api.NotFoundException;
+import shareit.model.Book;
+
+public class BooksApiServiceImpl extends BooksApiService
+{
     @Override
-    public Response getBookInformation(String bookISBN, SecurityContext securityContext) throws NotFoundException {
+    public Response getBookInformation(final String bookISBN, final SecurityContext securityContext) throws NotFoundException
+    {
         // do some magic!
         // stuff!
-        return Response.ok().entity(new ApiResponseMessage(ApiResponseMessage.OK, "magic!")).build();
+        final object.Book book = ReadISBN.getBookFromISBN(bookISBN);
+
+        final Book restBook = new Book();
+        restBook.setId(String.valueOf(book.getGoodReadsId()));
+        restBook.setTitle(book.getTitle());
+        restBook.setAuthor(book.getAuthor());
+        restBook.setIsbn(book.getIsbn());
+        restBook.setIsbn13(book.getIsbn13());
+        restBook.setImageUrl(book.getImageUrl());
+        restBook.setSmallImageUrl(book.getSmallImageUrl());
+
+        return Response.ok().entity(book).build();
     }
 }
