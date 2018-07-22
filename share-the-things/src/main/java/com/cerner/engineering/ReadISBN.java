@@ -3,6 +3,7 @@ package com.cerner.engineering;
 import com.cerner.engineering.object.Book;
 
 import java.net.HttpURLConnection;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -39,17 +40,19 @@ public class ReadISBN
             e.printStackTrace();
         }
 
+        final String isbn = "0441172717";
+
         // final Set<String> isbns = SetUtils.newSet("0590353403");
         // final String isbn = "0590353403";
-        final String isbn = "0441172717";
+        // I suspect the API doesn't support multiple isbns
         // final Set<String> isbns = SetUtils.newSet("0441172717", "0590353403");
-        // final Set<String> isbns = SetUtils.newSet("0441172717", "0590353403", "0739467352"); // I suspect the API doesn't support multiple isbns
+        // final Set<String> isbns = SetUtils.newSet("0441172717", "0590353403", "0739467352");
         // final Set<Long> ids = getIdsFromISBNs(isbns);
         // final Set<Book> books = getBookInfoFromIds(ids);
-        final Book book = getBooksFromISBNs(isbn);
+        final Book book = getBookFromISBN(isbn);
     }
 
-    private static Book getBooksFromISBNs(final String isbn)
+    public static Book getBookFromISBN(final String isbn)
     {
         final Book book = callResource(ISBN_TO_SHOW_BOOK, isbn);
         return book;
@@ -75,7 +78,7 @@ public class ReadISBN
         return null;
     }
 
-    public static Book callResource(final String resource, final String isbn)
+    private static Book callResource(final String resource, final String isbn)
     {
         // final String url = "https://www.goodreads.com/book/isbn_to_id/0590353403,0441172717?key=vAk3StDKFQ1FtKXzpzo9g";
 
@@ -108,8 +111,13 @@ public class ReadISBN
                 final Element bookElement = root.element("book");
 
                 final String title = bookElement.elementText("title");
-                // Element authorElement = bookElement.element("author");
-                // final String author = bookElement.elementText("author");
+                final String goodReadsId = bookElement.elementText("id");
+
+                // get the first author cuz whatever
+                final Element authorsElement = bookElement.element("authors");
+                final List<Element> authorElements = authorsElement.elements("author");
+                final String firstAuthorName = authorElements.get(0).elementText("name");
+
                 final String isbnResponse = bookElement.elementText("isbn");
                 final String isbn13 = bookElement.elementText("isbn13");
                 final String imageUrl = bookElement.elementText("image_url");
@@ -120,8 +128,9 @@ public class ReadISBN
                 final String publisher = bookElement.elementText("publisher");
 
                 final Book.Builder bookBuilder = Book.Builder.create();
+                bookBuilder.withGoodReadsId(Long.parseLong(goodReadsId));
                 bookBuilder.withTitle(title);
-                // bookBuilder.withAuthor(author);
+                bookBuilder.withAuthor(firstAuthorName);
                 bookBuilder.withIsbn(isbnResponse);
                 bookBuilder.withIsbn13(isbn13);
                 bookBuilder.withImageUrl(imageUrl);
