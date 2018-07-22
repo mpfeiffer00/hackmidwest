@@ -19,9 +19,14 @@
                 <td class="header_font">
                     <b>My Things</b>
                 </td>
-                <td style="vertical-align: center; align: center; padding:10px">
+                <%-- <td style="vertical-align: center; align: center; padding:10px">
                     <img src="${pageContext.request.contextPath}/images/barscan.png" width="25px">
-                </td>
+                </td> --%>
+                <td style="vertical-align: center; align: center; padding:10px">
+				    <form enctype="multipart/form-data" method="post" action="/add-pic">
+				        <input type="image" name="capture_pic" src="${pageContext.request.contextPath}/images/barscan.png" width="25px" border="0" accept="image/*;capture=camera" onchange="this.form.submit()" />
+				    </form>                 
+				</td>    
                 <td style="vertical-align: center; align: center; padding:10px">
                     <img src="${pageContext.request.contextPath}/images/search.png" width="25px">
                 </td>
