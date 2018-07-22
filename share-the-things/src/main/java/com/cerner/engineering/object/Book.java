@@ -15,6 +15,8 @@ public class Book
 
     private final String title;
 
+    private final String author;
+
     private final String isbn;
 
     private final String isbn13;
@@ -45,6 +47,14 @@ public class Book
     public String getTitle()
     {
         return title;
+    }
+
+    /**
+     * @return
+     */
+    public String getAuthor()
+    {
+        return author;
     }
 
     /**
@@ -118,8 +128,8 @@ public class Book
     public int hashCode()
     {
         return HashCodeAssistant.combineHashCodes(HashCodeAssistant.hashLong(goodReadsId), HashCodeAssistant.hashObject(title),
-                HashCodeAssistant.hashObject(isbn), HashCodeAssistant.hashObject(isbn13), HashCodeAssistant.hashObject(imageUrl),
-                HashCodeAssistant.hashObject(smallImageUrl), HashCodeAssistant.hashObject(publicationYear),
+                HashCodeAssistant.hashObject(author), HashCodeAssistant.hashObject(isbn), HashCodeAssistant.hashObject(isbn13),
+                HashCodeAssistant.hashObject(imageUrl), HashCodeAssistant.hashObject(smallImageUrl), HashCodeAssistant.hashObject(publicationYear),
                 HashCodeAssistant.hashObject(publicationMonth), HashCodeAssistant.hashObject(publicationDay),
                 HashCodeAssistant.hashObject(publisher));
     }
@@ -147,6 +157,11 @@ public class Book
         }
 
         if (EqualityAssistant.notEqual(title, other.title))
+        {
+            return false;
+        }
+
+        if (EqualityAssistant.notEqual(author, other.author))
         {
             return false;
         }
@@ -200,10 +215,11 @@ public class Book
     @Override
     public String toString()
     {
-        return new StringBuilder(700).append("Book[").append("goodReadsId=").append(goodReadsId).append(", title=").append(title).append(", isbn=")
-                .append(isbn).append(", isbn13=").append(isbn13).append(", imageUrl=").append(imageUrl).append(", smallImageUrl=")
-                .append(smallImageUrl).append(", publicationYear=").append(publicationYear).append(", publicationMonth=").append(publicationMonth)
-                .append(", publicationDay=").append(publicationDay).append(", publisher=").append(publisher).append("]").toString();
+        return new StringBuilder(700).append("Book[").append("goodReadsId=").append(goodReadsId).append(", title=").append(title).append(", author=")
+                .append(author).append(", isbn=").append(isbn).append(", isbn13=").append(isbn13).append(", imageUrl=").append(imageUrl)
+                .append(", smallImageUrl=").append(smallImageUrl).append(", publicationYear=").append(publicationYear).append(", publicationMonth=")
+                .append(publicationMonth).append(", publicationDay=").append(publicationDay).append(", publisher=").append(publisher).append("]")
+                .toString();
     }
 
     /**
@@ -219,14 +235,16 @@ public class Book
 
         goodReadsId = builder.goodReadsId;
         title = builder.title;
+        author = builder.author;
         isbn = builder.isbn;
         isbn13 = builder.isbn13;
-        imageUrl = builder.imageUrl;
 
+        imageUrl = builder.imageUrl;
         smallImageUrl = builder.smallImageUrl;
         publicationYear = builder.publicationYear;
         publicationMonth = builder.publicationMonth;
         publicationDay = builder.publicationDay;
+
         publisher = builder.publisher;
     }
 
@@ -237,6 +255,7 @@ public class Book
     {
         private long goodReadsId;
         private String title;
+        private String author;
         private String isbn;
         private String isbn13;
         private String imageUrl;
@@ -287,6 +306,20 @@ public class Book
         {
             verifyBuildingState();
             this.title = title;
+            return this;
+        }
+
+        /**
+         * @param author
+         *            .
+         * @return Non-null Builder used to continue building the object.
+         * @throws IllegalStateException
+         *             if this builder is finished building the object.
+         */
+        public Builder withAuthor(@SuppressWarnings("hiding") final String author)
+        {
+            verifyBuildingState();
+            this.author = author;
             return this;
         }
 

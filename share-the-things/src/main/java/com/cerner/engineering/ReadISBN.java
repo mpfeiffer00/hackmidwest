@@ -1,15 +1,9 @@
 package com.cerner.engineering;
 
-import com.cerner.common.collection.SetUtils;
 import com.cerner.engineering.object.Book;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -17,6 +11,10 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 
 public class ReadISBN
 {
@@ -24,12 +22,13 @@ public class ReadISBN
     private static final String BASE_URL = "https://www.goodreads.com/book/";
     private static final String ISBN_TO_ID = "isbn_to_id";
     private static final String SHOW_BOOK = "show";
+    private static final String ISBN_TO_SHOW_BOOK = "isbn";
     private static final String SEPARATOR = ",";
     private static final String ISBN_TO_ID_RESPONSE_SEPARATOR = "\n";
 
     private static HttpURLConnection con;
 
-    public static void main(final String[] args) throws MalformedURLException, ProtocolException, IOException
+    public static void main(final String[] args)
     {
         try
         {
@@ -40,43 +39,23 @@ public class ReadISBN
             e.printStackTrace();
         }
 
-        final Set<String> isbns = SetUtils.newSet("0590353403");
+        // final Set<String> isbns = SetUtils.newSet("0590353403");
+        // final String isbn = "0590353403";
+        final String isbn = "0441172717";
         // final Set<String> isbns = SetUtils.newSet("0441172717", "0590353403");
         // final Set<String> isbns = SetUtils.newSet("0441172717", "0590353403", "0739467352"); // I suspect the API doesn't support multiple isbns
-        final Set<Long> ids = getIdsFromISBNs(isbns);
-        final Set<Book> books = getBookInfoFromIds(ids);
-        System.out.println(ids);
+        // final Set<Long> ids = getIdsFromISBNs(isbns);
+        // final Set<Book> books = getBookInfoFromIds(ids);
+        final Book book = getBooksFromISBNs(isbn);
     }
 
-    private static Set<Long> getIdsFromISBNs(final Set<String> isbns) throws MalformedURLException, ProtocolException, IOException
+    private static Book getBooksFromISBNs(final String isbn)
     {
-        // https://www.goodreads.com/book/isbn_to_id/0590353403?key=vAk3StDKFQ1FtKXzpzo9g
-
-        final StringBuilder concatenatedIsbnsBuilder = new StringBuilder();
-        for (final String isbn : isbns)
-        {
-            concatenatedIsbnsBuilder.append(isbn);
-            concatenatedIsbnsBuilder.append(SEPARATOR);
-        }
-
-        String concatenatedIsbns = concatenatedIsbnsBuilder.toString();
-        concatenatedIsbns = concatenatedIsbns.substring(0, concatenatedIsbns.length() - SEPARATOR.length());
-
-        System.out.println(concatenatedIsbns);
-
-        final String response = callResource(ISBN_TO_ID, concatenatedIsbns);
-
-        final Set<Long> goodReadsIds = new HashSet();
-        final StringTokenizer st = new StringTokenizer(response, ISBN_TO_ID_RESPONSE_SEPARATOR);
-        while (st.hasMoreTokens())
-        {
-            goodReadsIds.add(Long.valueOf(st.nextToken()));
-        }
-
-        return goodReadsIds;
+        final Book book = callResource(ISBN_TO_SHOW_BOOK, isbn);
+        return book;
     }
 
-    private static Set<Book> getBookInfoFromIds(final Set<Long> goodReadsBookIds) throws MalformedURLException, ProtocolException, IOException
+    private static Set<Book> getBookInfoFromIds(final Set<Long> goodReadsBookIds)
     {
         // https://www.goodreads.com/book/show/29409154?format=xml?key=YOURAPIKEY
 
@@ -96,76 +75,69 @@ public class ReadISBN
         return null;
     }
 
-    public static String callResource(final String resource, final String idParameters) throws MalformedURLException, ProtocolException, IOException
+    public static Book callResource(final String resource, final String isbn)
     {
         // final String url = "https://www.goodreads.com/book/isbn_to_id/0590353403,0441172717?key=vAk3StDKFQ1FtKXzpzo9g";
 
-        final String url = new StringBuilder().append(BASE_URL).append(resource).append("/").append(idParameters).append("?key=vAk3StDKFQ1FtKXzpzo9g")
-                .toString();
+        // final String url = new
+        // StringBuilder().append(BASE_URL).append(resource).append("/").append(idParameters).append("?key=vAk3StDKFQ1FtKXzpzo9g")
+        // .toString();
 
-        String stringResponse = null;
-
-        // try
-        // {
-        // final URL myurl = new URL(url);
-        // con = (HttpURLConnection) myurl.openConnection();
-        // con.setRequestMethod("GET");
-        // StringBuilder content;
-        //
-        // try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream())))
-        // {
-        // String line;
-        // content = new StringBuilder();
-        //
-        // System.out.println(in.toString());
-        //
-        // while ((line = in.readLine()) != null)
-        // {
-        // content.append(line); // eh eh?
-        // content.append(System.lineSeparator());
-        // }
-        // }
-        //
-        // System.out.println(content.toString());
-        // return content.toString();
+        final String url = new StringBuilder().append(BASE_URL).append(resource).append("/").append(isbn)
+                .append("?format=xml&key=vAk3StDKFQ1FtKXzpzo9g").toString();
 
         try (final CloseableHttpClient httpClient = new DefaultHttpClient())
         {
             final HttpRequestBase request = new HttpGet(url);
-            try (CloseableHttpResponse response = httpClient.execute(request))
+            try (final CloseableHttpResponse response = httpClient.execute(request))
             {
-                // EntityUtils.toString(response.getEntity());
+                final String stringResponse = EntityUtils.toString(response.getEntity());
 
-                stringResponse = EntityUtils.toString(response.getEntity());
-                System.out.println(stringResponse);
-                // final JSONObject jsonResponse = new JSONObject(EntityUtils.toString(response.getEntity()));
-                //
-                // System.out.println("ISBN-to-ID response:" + jsonResponse.toString());
-                // if (!jsonResponse.isNull("detailedReviewData"))
-                // {
-                // final JSONArray authorReviewData = jsonResponse.getJSONArray("detailedReviewData");
-                //
-                // for (int i = 0; i < authorReviewData.length(); i++)
-                // {
-                // final JSONObject jsonReview = authorReviewData.getJSONObject(i);
-                // final Review.Builder reviewBuilder = getReviewFromJson(jsonReview);
-                // final Review review = reviewBuilder.withCrucibleInstance(instance).build();
-                //
-                // reviews.add(review);
-                // }
-                // }
+                Document document = null;
+                try
+                {
+                    document = DocumentHelper.parseText(stringResponse);
+                }
+                catch (final DocumentException e)
+                {
+                    e.printStackTrace();
+                }
+
+                final Element root = document.getRootElement();
+
+                final Element bookElement = root.element("book");
+
+                final String title = bookElement.elementText("title");
+                // Element authorElement = bookElement.element("author");
+                // final String author = bookElement.elementText("author");
+                final String isbnResponse = bookElement.elementText("isbn");
+                final String isbn13 = bookElement.elementText("isbn13");
+                final String imageUrl = bookElement.elementText("image_url");
+                final String smallImageUrl = bookElement.elementText("small_image_url");
+                final String publicationYear = bookElement.elementText("publication_year");
+                final String publicationMonth = bookElement.elementText("publication_month");
+                final String publicationDay = bookElement.elementText("publication_day");
+                final String publisher = bookElement.elementText("publisher");
+
+                final Book.Builder bookBuilder = Book.Builder.create();
+                bookBuilder.withTitle(title);
+                // bookBuilder.withAuthor(author);
+                bookBuilder.withIsbn(isbnResponse);
+                bookBuilder.withIsbn13(isbn13);
+                bookBuilder.withImageUrl(imageUrl);
+                bookBuilder.withSmallImageUrl(smallImageUrl);
+                bookBuilder.withPublicationYear(Long.valueOf(publicationYear));
+                bookBuilder.withPublicationMonth(Long.valueOf(publicationMonth));
+                bookBuilder.withPublicationDay(Long.valueOf(publicationDay));
+                bookBuilder.withPublisher(publisher);
+
+                return bookBuilder.build();
             }
         }
         catch (final Exception e)
         {
-            // errorInformation.append("Error retrieving reviews from " + instance.getBaseURL() + "<br>");
             e.printStackTrace();
         }
-        // }
-        // finally
-        // {
-        // con.disconnect();
-        // }
-        return stringResponse;
+        return null;
     }
 }
