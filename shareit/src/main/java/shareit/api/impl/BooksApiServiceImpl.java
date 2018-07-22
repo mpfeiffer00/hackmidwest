@@ -19,7 +19,7 @@ public class BooksApiServiceImpl extends BooksApiService
         final object.Book book = ReadISBN.getBookFromISBN(bookISBN);
 
         final Book restBook = new Book();
-        restBook.setId(String.valueOf(book.getGoodReadsId()));
+        restBook.setGoodReadsId(String.valueOf(book.getGoodReadsId()));
         restBook.setTitle(book.getTitle());
         restBook.setAuthor(book.getAuthor());
         restBook.setIsbn(book.getIsbn());
