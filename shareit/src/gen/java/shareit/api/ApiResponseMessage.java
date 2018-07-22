@@ -3,7 +3,7 @@ package shareit.api;
 import javax.xml.bind.annotation.XmlTransient;
 
 @javax.xml.bind.annotation.XmlRootElement
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2018-07-21T19:30:29.712-05:00")
+
 public class ApiResponseMessage {
     public static final int ERROR = 1;
     public static final int WARNING = 2;

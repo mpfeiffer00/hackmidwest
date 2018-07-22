@@ -6,6 +6,7 @@ target/
 */target/*
 bin/
 */bin/*
+*/.swagger-codegen/*
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
