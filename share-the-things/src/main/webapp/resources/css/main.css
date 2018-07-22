@@ -61,7 +61,7 @@
 .rectangle {
     width:200px;
     height:200px;
-    background:gray;
+    background-color: #d1d1e0;
     margin-top:20px;
     margin-right:20px;
     margin-bottom:20px;
