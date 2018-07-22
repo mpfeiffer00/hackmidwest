@@ -3,16 +3,20 @@ package com.cerner.engineering;
 import com.cerner.common.collection.SetUtils;
 import com.cerner.engineering.object.Book;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
-import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
+
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 public class ReadISBN
 {
@@ -37,7 +41,8 @@ public class ReadISBN
         }
 
         final Set<String> isbns = SetUtils.newSet("0590353403");
-        // final Set<String> isbns = SetUtils.newSet("0441172717", "0590353403", "0739467352"); // need to figure out multiple isbns
+        // final Set<String> isbns = SetUtils.newSet("0441172717", "0590353403");
+        // final Set<String> isbns = SetUtils.newSet("0441172717", "0590353403", "0739467352"); // I suspect the API doesn't support multiple isbns
         final Set<Long> ids = getIdsFromISBNs(isbns);
         final Set<Book> books = getBookInfoFromIds(ids);
         System.out.println(ids);
@@ -73,7 +78,7 @@ public class ReadISBN
 
     private static Set<Book> getBookInfoFromIds(final Set<Long> goodReadsBookIds) throws MalformedURLException, ProtocolException, IOException
     {
-        // https://www.goodreads.com/book/show/29409154?format=xml&key=YOURAPIKEY
+        // https://www.goodreads.com/book/show/29409154?format=xml?key=YOURAPIKEY
 
         final StringBuilder concatenatedIdsBuilder = new StringBuilder();
         for (final Long goodReadsBookId : goodReadsBookIds)
@@ -98,33 +103,69 @@ public class ReadISBN
         final String url = new StringBuilder().append(BASE_URL).append(resource).append("/").append(idParameters).append("?key=vAk3StDKFQ1FtKXzpzo9g")
                 .toString();
 
-        try
-        {
-            final URL myurl = new URL(url);
-            con = (HttpURLConnection) myurl.openConnection();
-            con.setRequestMethod("GET");
-            StringBuilder content;
+        String stringResponse = null;
 
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream())))
+        // try
+        // {
+        // final URL myurl = new URL(url);
+        // con = (HttpURLConnection) myurl.openConnection();
+        // con.setRequestMethod("GET");
+        // StringBuilder content;
+        //
+        // try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream())))
+        // {
+        // String line;
+        // content = new StringBuilder();
+        //
+        // System.out.println(in.toString());
+        //
+        // while ((line = in.readLine()) != null)
+        // {
+        // content.append(line); // eh eh?
+        // content.append(System.lineSeparator());
+        // }
+        // }
+        //
+        // System.out.println(content.toString());
+        // return content.toString();
+
+        try (final CloseableHttpClient httpClient = new DefaultHttpClient())
+        {
+            final HttpRequestBase request = new HttpGet(url);
+            try (CloseableHttpResponse response = httpClient.execute(request))
             {
-                String line;
-                content = new StringBuilder();
+                // EntityUtils.toString(response.getEntity());
 
-                System.out.println(in.toString());
-
-                while ((line = in.readLine()) != null)
-                {
-                    content.append(line); // eh eh?
-                    content.append(System.lineSeparator());
-                }
+                stringResponse = EntityUtils.toString(response.getEntity());
+                System.out.println(stringResponse);
+                // final JSONObject jsonResponse = new JSONObject(EntityUtils.toString(response.getEntity()));
+                //
+                // System.out.println("ISBN-to-ID response:" + jsonResponse.toString());
+                // if (!jsonResponse.isNull("detailedReviewData"))
+                // {
+                // final JSONArray authorReviewData = jsonResponse.getJSONArray("detailedReviewData");
+                //
+                // for (int i = 0; i < authorReviewData.length(); i++)
+                // {
+                // final JSONObject jsonReview = authorReviewData.getJSONObject(i);
+                // final Review.Builder reviewBuilder = getReviewFromJson(jsonReview);
+                // final Review review = reviewBuilder.withCrucibleInstance(instance).build();
+                //
+                // reviews.add(review);
+                // }
+                // }
             }
-
-            System.out.println(content.toString());
-            return content.toString();
         }
-        finally
+        catch (final Exception e)
         {
-            con.disconnect();
+            // errorInformation.append("Error retrieving reviews from " + instance.getBaseURL() + "<br>");
+            e.printStackTrace();
         }
+        // }
+        // finally
+        // {
+        // con.disconnect();
+        // }
+        return stringResponse;
     }
 }
