@@ -1,0 +1,163 @@
+swagger: '2.0'
+info:
+  description: Inventory for stuff.
+  version: 1.0.0
+  title: ShareIt
+  termsOfService: ''
+  contact:
+    email: michael.pfieffer@cerner.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: vmordersdev2.ip.devcerner.net
+basePath: /v1
+schemes:
+  - https
+  - http
+paths:
+  /users:
+    post:
+      summary: Create new user
+      operationId: createUser
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Created user object
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        default:
+          description: successful operation
+  '/users/{userId}':
+    get:
+      summary: Get user by user id
+      description: Retrieve the User by the user's id
+      operationId: getUserByName
+      produces:
+        - application/json
+      parameters:
+        - name: userId
+          in: path
+          description: The id that needs to be fetched.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+        '404':
+          description: User not found
+  '/users/{userId}/items':
+    get:
+      summary: Get all items for the user.
+      description: Retrieve a list of all items belonging to the user.
+      operationId: getItemsForUser
+      produces:
+        - application/json
+      parameters:
+        - name: userId
+          in: path
+          description: The id that needs to be fetched.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Item'
+        '404':
+          description: User not found
+    post:
+      summary: Create item for the user.
+      operationId: createItemForUser
+      produces:
+        - application/json
+      parameters:
+        - name: userId
+          in: path
+          description: The id that needs to be fetched.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Created item object
+          required: true
+          schema:
+            $ref: '#/definitions/Item'
+      responses:
+        default:
+          description: successful operation
+  '/users/{userId}/items/{itemId}':
+    get:
+      summary: Get an item for the user.
+      description: Retrieve an item belonging to the user.
+      operationId: getItemForUser
+      produces:
+        - application/json
+      parameters:
+        - name: userId
+          in: path
+          description: The user id that needs to be fetched.
+          required: true
+          type: string
+        - name: itemId
+          in: path
+          description: The item id that needs to be fetched.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Item'
+        '404':
+          description: Item not found for user
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: string
+      username:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      phone:
+        type: string
+      active:
+        type: boolean
+        default: false
+  Item:
+    type: object
+    properties:
+      id:
+        type: string
+      title:
+        type: string
+      description:
+        type: string
+      brand:
+        type: string
+      model:
+        type: string
+      color:
+        type: string
+      imageLinks:
+        type: array
+        items:
+          type: string
+      inOwnersPosession:
+        type: boolean
+        default: true
+      category:
+        type: string
