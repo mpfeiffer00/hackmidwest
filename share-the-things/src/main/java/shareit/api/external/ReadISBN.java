@@ -1,4 +1,4 @@
-package com.cerner.engineering;
+package shareit.api.external;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import object.Book;
+import shareit.object.Book;
 
 public class ReadISBN
 {
@@ -45,6 +45,11 @@ public class ReadISBN
 
     private static Book callResource(final String resource, final String isbn)
     {
+        if (isbn == null || isbn.isEmpty())
+        {
+            System.out.println("isbn null or empty");
+            return null;
+        }
         // final String url = "https://www.goodreads.com/book/isbn_to_id/0590353403,0441172717?key=vAk3StDKFQ1FtKXzpzo9g";
 
         // final String url = new
@@ -60,7 +65,6 @@ public class ReadISBN
             try (final CloseableHttpResponse response = httpClient.execute(request))
             {
                 final String stringResponse = EntityUtils.toString(response.getEntity());
-                System.out.println(stringResponse);
 
                 Document document = null;
                 try
@@ -69,6 +73,7 @@ public class ReadISBN
                 } catch (final DocumentException e)
                 {
                     e.printStackTrace();
+                    return null;
                 }
 
                 final Element root = document.getRootElement();
@@ -100,9 +105,24 @@ public class ReadISBN
                 bookBuilder.withIsbn13(isbn13);
                 bookBuilder.withImageUrl(imageUrl);
                 bookBuilder.withSmallImageUrl(smallImageUrl);
-                bookBuilder.withPublicationYear(Long.valueOf(publicationYear));
-                bookBuilder.withPublicationMonth(Long.valueOf(publicationMonth));
-                bookBuilder.withPublicationDay(Long.valueOf(publicationDay));
+                try
+                {
+                    bookBuilder.withPublicationYear(Long.valueOf(publicationYear));
+                } catch (final NumberFormatException e)
+                {
+                }
+                try
+                {
+                    bookBuilder.withPublicationMonth(Long.valueOf(publicationMonth));
+                } catch (final NumberFormatException e)
+                {
+                }
+                try
+                {
+                    bookBuilder.withPublicationDay(Long.valueOf(publicationDay));
+                } catch (final NumberFormatException e)
+                {
+                }
                 bookBuilder.withPublisher(publisher);
 
                 return bookBuilder.build();
@@ -110,7 +130,7 @@ public class ReadISBN
         } catch (final Exception e)
         {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 }

@@ -5,7 +5,7 @@
    <display-name>Crucible Aggregator Web Application</display-name>
 
    <servlet>
-      <servlet-name>share-all-the-things</servlet-name>
+      <servlet-name>share-it</servlet-name>
       <servlet-class>
          org.springframework.web.servlet.DispatcherServlet
       </servlet-class>
@@ -13,13 +13,13 @@
    </servlet>
 
    <servlet-mapping>
-      <servlet-name>share-all-the-things</servlet-name>
+      <servlet-name>share-it</servlet-name>
       <url-pattern>/</url-pattern>
    </servlet-mapping>
 
    <context-param>
       <param-name>contextConfigLocation</param-name>
-      <param-value>/WEB-INF/share-all-the-things-servlet.xml</param-value>
+      <param-value>/WEB-INF/share-it-servlet.xml</param-value>
    </context-param>
 
    <listener>

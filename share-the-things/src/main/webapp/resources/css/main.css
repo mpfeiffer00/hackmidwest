@@ -1,71 +1,224 @@
+body {
+    background-color: lightblue;
+}
+
+img {
+  max-height: 100%;
+  max-width: 100%;
+}
+
 .main {
-    overflow: auto;
     position: absolute;
     top:0;
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 10;
+    padding: 1em;
+    width: 80%;
     margin: auto;
-    background-color: white;
 }
 
-/* Header font */
-.header_font {
-    font-size: xx-large;
-    vertical-align: center;
-    padding: 10px;
-    align: center;
-    font-family:verdana
+.content {
+    display: block;
+    width: 80%;
+    margin: auto;
+    min-width: 320px;
 }
 
-/* Default font */
 .font {
     font-size: medium;
-    vertical-align: center;
-    padding: 10px;
-    align: center;
-    font-family:verdana
-}
-
-/* The navigation bar */
-.navbar {
-    overflow: hidden;
-    background-color: #f8f8f8;
-    position: fixed; /* Set the navbar to fixed position */
-    top: 0; /* Position the navbar at the top of the page */
-    width: 100%; /* Full width */
-}
-
-/* Links inside the navbar */
-.navbar a {
-    float: left;
-    display: block;
-    color: #f2f2f2;
+    vertical-align: middle;
     text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
+    font-family: verdana;
 }
 
-/* Change background on mouse-over */
-.navbar a:hover {
-    background: #ddd;
-    color: black;
-}
-
-/* Main content */
-.main {
-    margin-top: 30px; /* Add a top margin to avoid content overlay */
+#navbar {
+    overflow: auto;
+    background-color: #f8f8f8;
+    background: linear-gradient(45deg, paleturquoise 55%, floralwhite);
+    position: relative;
+    top: 0;
+    display: block;
 }
 
 .rectangle {
     width:200px;
     height:200px;
     background-color: #d1d1e0;
-    margin-top:20px;
-    margin-right:20px;
-    margin-bottom:20px;
-    margin-left:20px;
-    vertical-align:center;
-    text-align:center;
+    margin: auto;
+}
+
+.icon {
+    width: 32px;
+    height: 32px;
+    padding: 1em;
+}
+
+.navbar_item {
+    display: inline-block;
+}
+
+.navbar_left {
+    float: left;
+}
+
+#menu_icon {
+    float: left;
+}
+
+#navbar_title {
+    float: left;
+    padding-left: .5em;
+    line-height: 1.7em;
+    font-size: 3em;
+    vertical-align: middle;
+    font-family:verdana
+}
+
+.navbar_right {
+    float: right;
+}
+
+#mainContent {
+  position: relative;
+  height: 90%;
+  overflow: auto;
+  background-color: steelblue;
+  margin-bottom: 1em;
+}
+
+#scanBtn {
+	width: 0px;
+	max-width: 0px;
+}
+
+#search {
+  display: block;
+  padding: 2em;
+  font-size: x-large;
+  vertical-align: middle;
+}
+
+#searchInput {
+  width: 20em;
+  height: 2em;
+  margin: .75em;
+  padding-left: .5em;
+  font-size: large;
+  border-radius: 15px;
+  border-width: medium;
+  border-color: lightsteelblue;
+}
+
+#isbnInfo {
+  width: 90%;
+  text-align: justify;
+  margin: auto;
+  font-size: small;
+  background-color: gainsboro;
+  padding: 1em;
+}
+
+#searchBtn {
+  vertical-align: middle;
+  width: 24px;
+  height: auto;
+  filter: saturate(0%) brightness(0%);
+}
+
+.bookResult {
+	flex-basis: 0;
+	padding-top: 1em;
+	padding-bottom: 2em;
+	background-color: lightskyblue;
+	margin-top: 2em;
+	margin-bottom: 2em;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 15px;
+	border-width: medium;
+	border-style: outset;
+	border-color: steelblue;
+}
+#bookInfo {
+  text-align: center;
+  padding: 2em;
+  height: inherit;
+  overflow: scroll;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#bookTitle {
+  font-size: xx-large;
+  width: 15em;
+  margin: auto;
+}
+
+#bookAuthor {
+  font-size: large;
+}
+
+#coverImg {
+  margin: auto;
+  padding: 1em;
+}
+
+#addBookBtn {
+  display: block;
+  margin: auto;
+  margin-top: 1em;
+  padding-left: .5em;
+  font-size: large;
+  border-radius: 15px;
+  border-width: medium;
+  background-color: lightsteelblue;
+  border-color: steelblue;
+}
+
+@media screen and (max-width: 1052px){
+    .content{
+      min-width: 670px;
+      width: 670px;
+    }
+    .main {
+      width: unset;
+      padding: unset;
+    }
+}
+
+@media screen and (max-width: 670px){
+    .main{
+      padding: 0px;
+      margin: 0px;
+      width: 100%;
+    }
+
+    .content {
+      width: 100%;
+      min-width: unset;
+      margin: 0px;
+    }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    #navbar_title {
+      font-size: 2em;
+      line-height: 2.1em;
+    }
+    #isbn {
+      width: 13em;
+    }
+
+    #mainContent {
+      height: 100%;
+    }
+
+    #coverImg {
+      padding: .25em;
+      margin: 0px;
+    }
 }

@@ -1,4 +1,4 @@
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
    xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -18,6 +18,14 @@
          <value>.jsp</value>
       </property>
    </bean>
+   
+   <beans:bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+
+         <!-- setting maximum upload size -->
+        <beans:property name="maxUploadSize" value="5000000" />
+
+    </beans:bean>
    
    <mvc:annotation-driven></mvc:annotation-driven>
    <mvc:resources location="/resources/" mapping="/resources/**" />
